@@ -50,13 +50,13 @@ export default async function ShowPage({ params }: PageProps) {
       <div className="flex-1 flex flex-col overflow-hidden">
 
         {/* 공연 헤더 */}
-        <div className="relative h-64 overflow-hidden flex-shrink-0">
+        <div className="relative h-54 overflow-hidden flex-shrink-0">
           {show.artwork_url && (
             <div
               className="absolute inset-0 bg-cover bg-center scale-110"
               style={{
                 backgroundImage: `url(${show.artwork_url})`,
-                filter: 'blur(40px)',
+                filter: 'blur(20px)',
                 opacity: 0.3,
               }}
             />
