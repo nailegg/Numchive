@@ -30,7 +30,7 @@ const dmMono = DM_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Numchaive',
+  title: 'Numchive',
   description: 'KAIST 창작뮤지컬 동아리 Number MR 아카이브 서비스',
 }
 
