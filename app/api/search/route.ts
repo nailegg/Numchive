@@ -9,7 +9,7 @@ export async function GET(request: Request) {
 
   // 트랙 제목 검색
   const { data: trackResults } = await supabase
-    .from('tracks')
+    .from('numbers')
     .select('*, shows(title)')
     .ilike('title', `%${q}%`)  // 대소문자 구분 없는 부분 일치
 
