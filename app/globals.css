@@ -45,9 +45,21 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* ── 커스텀 변수 추가 ── */
+  --color-nc-bg: var(--nc-bg);
+  --color-nc-surface: var(--nc-surface);
+  --color-nc-surface2: var(--nc-surface2);
+  --color-nc-accent: var(--nc-accent);
+  --color-nc-accent2: var(--nc-accent2);
+  --color-nc-text: var(--nc-text);
+  --color-nc-text-muted: var(--nc-text-muted);
+  --color-nc-text-dim: var(--nc-text-dim);
+  --color-nc-border: var(--nc-border);
 }
 
 :root {
+  /* shadcn 기존 변수 유지 */
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -80,6 +92,17 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* ── Numchive 커스텀 변수 ── */
+  --nc-bg: #0a0a0f;
+  --nc-surface: #111118;
+  --nc-surface2: #18181f;
+  --nc-accent: #c8a96e;
+  --nc-accent2: #8b6f47;
+  --nc-text: #e8e4dc;
+  --nc-text-muted: #6b6760;
+  --nc-text-dim: #9b9690;
+  --nc-border: 255, 255, 255;
 }
 
 .dark {
