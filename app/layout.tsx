@@ -59,7 +59,7 @@ export default function RootLayout({
                 KAIST Number<br/>Origianl Soundtrack Archive
               </span>
               <span className="font-display text-xl font-light text-nc-text hover:text-nc-accent transition-colors">
-                Numchaive
+                Numchive
               </span>
             </Link>
 
