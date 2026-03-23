@@ -2,12 +2,20 @@
 import Link from 'next/link'
 import { Show } from '@/types'
 
-export default function ShowCard({ show }: { show: Show }) {
+interface ShowCardProps {
+  show: Show
+  isActive?: boolean  // ← 추가
+}
+
+export default function ShowCard({ show, isActive = false }: ShowCardProps) {
   return (
     <Link href={`/${show.id}`}>
       <div className="group cursor-pointer">
         {/* 아트워크 */}
-        <div className="relative aspect-square overflow-hidden rounded-sm mb-3">
+        <div className={`
+          relative aspect-square overflow-hidden rounded-sm mb-3
+          ${isActive ? 'ring-1 ring-nc-accent' : ''}
+        `}>
           {show.artwork_url ? (
             <img
               src={show.artwork_url}
@@ -29,11 +37,14 @@ export default function ShowCard({ show }: { show: Show }) {
 
         {/* 텍스트 */}
         <div>
-          <h2 className="text-sm font-medium text-nc-text group-hover:text-nc-accent transition-colors truncate">
+          <h2 className={`
+            text-sm font-medium truncate transition-colors
+            ${isActive ? 'text-nc-accent' : 'text-nc-text group-hover:text-nc-accent'}
+          `}>
             {show.title}
           </h2>
           <p className="font-mono text-[10px] text-nc-text-muted mt-1">
-            {show.year} {show.season == 'F' ? 'Fall' : 'Spring'}
+            {show.year}{show.season ? ` · ${show.season}` : ''}
           </p>
         </div>
       </div>
