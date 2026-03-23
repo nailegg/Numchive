@@ -109,7 +109,7 @@ export default function Player() {
       </div>
 
       {/* 플레이어 바 — 3열 그리드 */}
-      <div className="h-20 bg-nc-surface/95 backdrop-blur-md border-t border-white/10 grid grid-cols-[1fr_auto_1fr] items-center px-8 gap-6">
+      <div className="h-20 bg-nc-surface/95 backdrop-blur-md border-t border-white/10 grid grid-cols-3 items-center px-8 gap-6">
 
         {/* ── 좌측 — 컨트롤 + 시간 ── */}
         <div className="flex items-center gap-5">
