@@ -1,4 +1,3 @@
-// app/api/people/route.ts
 import { supabase } from '@/lib/supabase'
 import { NextResponse } from 'next/server'
 
