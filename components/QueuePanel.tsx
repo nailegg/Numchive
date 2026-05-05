@@ -3,7 +3,8 @@
 import { usePlayerStore } from '@/store/playerStore'
 
 export default function QueuePanel() {
-  const { isQueueOpen, queue, currentTrack, setTrack, toggleQueue } = usePlayerStore()
+  const { isQueueOpen, playbackQueue, currentTrack, playQueueTrack } = usePlayerStore()
+  const queue = playbackQueue.tracks
 
   return (
     <div className={`
@@ -24,16 +25,16 @@ export default function QueuePanel() {
             재생 목록
           </p>
           <p className="text-xs text-nc-text-dim">
-            {queue.length} tracks
+            {playbackQueue.sourceTitle} · {queue.length} tracks
           </p>
         </div>
 
         {/* 트랙 목록 */}
         <div className="flex-1 overflow-y-auto">
-          {queue.map((track, i) => (
+          {queue.map((track) => (
             <div
               key={track.id}
-              onClick={() => setTrack(track)}
+              onClick={() => playQueueTrack(track)}
               className={`
                 flex items-center gap-3 px-4 py-3 cursor-pointer
                 transition-all duration-150 hover:bg-white/5

@@ -6,7 +6,7 @@ export async function GET(request: Request) {
   const role = searchParams.get('role')
 
   let query = supabase.from('people').select('*')
-  if (role) query = query.contains('role_types', [role])
+  if (role) query = query.contains('role', [role])
 
   const { data, error } = await query.order('name')
 

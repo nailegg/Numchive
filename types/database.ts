@@ -226,7 +226,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      search_archive: {
+        Args: {
+          search_query: string
+          number_limit?: number
+          show_limit?: number
+        }
+        Returns: Json
+      }
     }
     Enums: {
       [_ in never]: never

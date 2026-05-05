@@ -3,6 +3,7 @@ import { supabase } from '@/lib/supabase'
 import TrackList from '@/components/TrackList'
 import ShowNav from '@/components/ShowNav'
 import ShowPlayButtons from '@/components/ShowPlayButtons'
+import LibrarySidebar from '@/components/LibrarySidebar'
 
 interface PageProps {
   params: Promise<{ showId: string }>
@@ -34,15 +35,20 @@ export default async function ShowPage({ params }: PageProps) {
     <div className="flex h-[calc(100vh-148px)]">
                   
 
-      {/* 좌측 사이드바 — 공연 목록 */}
+      {/* 좌측 사이드바 — 공연 목록 + 플레이리스트 */}
       <aside className="w-72 flex-shrink-0 border-r border-white/10 flex flex-col overflow-hidden">
-        <div className="px-4 py-4 border-b border-white/10 flex-shrink-0">
-          <p className="font-mono text-[9px] tracking-[0.18em] text-nc-text-muted uppercase">
-            공연 목록
-          </p>
+        <div className="flex min-h-0 flex-1 flex-col border-b border-white/10">
+          <div className="px-4 py-4 border-b border-white/10 flex-shrink-0">
+            <p className="font-mono text-[9px] tracking-[0.18em] text-nc-text-muted uppercase">
+              공연 목록
+            </p>
+          </div>
+          <div className="flex-1 overflow-y-auto py-3">
+            <ShowNav currentShowId={showId} />
+          </div>
         </div>
-        <div className="flex-1 overflow-y-auto py-3">
-          <ShowNav currentShowId={showId} />
+        <div className="min-h-0 flex-1">
+          <LibrarySidebar />
         </div>
       </aside>
 

@@ -4,46 +4,37 @@ import { useEffect, useRef, useState } from 'react'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { VolumeHighIcon, VolumeLowIcon, VolumeOffIcon } from '@hugeicons/core-free-icons'
 import { usePlayerStore } from '@/store/playerStore'
-import {
-  playAudio, pauseAudio, resumeAudio,
-  getCurrentTime, getDuration, seekAudio, setVolume,
-} from '@/lib/audio'
+import { useAudioController } from '@/hooks/useAudioController'
+import Waveform from '@/components/Waveform'
+import AddToPlaylistMenu from '@/components/AddToPlaylistMenu'
 
 export default function Player() {
-  const { currentTrack, isPlaying, togglePlay, nextTrack, prevTrack, isQueueOpen, toggleQueue } = usePlayerStore()
+  const {
+    currentTrack,
+    isPlaying,
+    togglePlay,
+    nextTrack,
+    prevTrack,
+    isQueueOpen,
+    toggleQueue,
+    repeatMode,
+    toggleRepeatMode,
+  } = usePlayerStore()
+  const { currentTime, duration, seek, setVolume } = useAudioController()
   const [progress, setProgress] = useState(0)
-  const [currentTime, setCurrentTime] = useState(0)
-  const [duration, setDuration] = useState(0)
+  const [previewTime, setPreviewTime] = useState<number | null>(null)
   const [volume, setVolumeState] = useState(0.8)
-  const progressInterval = useRef<NodeJS.Timeout | null>(null)
   const isDragging = useRef(false)
   const progressBarRef = useRef<HTMLDivElement>(null)
+  const removeDragListenersRef = useRef<(() => void) | null>(null)
+
+  useEffect(() => { setVolume(volume) }, [setVolume, volume])
 
   useEffect(() => {
-    if (!currentTrack) return
-    playAudio(currentTrack.file_url, {
-      onEnd: () => nextTrack(),
-      onLoad: () => setDuration(getDuration()),
-    })
-    if (progressInterval.current) clearInterval(progressInterval.current)
-    progressInterval.current = setInterval(() => {
-      if (isDragging.current) return
-      const current = getCurrentTime()
-      const total = getDuration()
-      setCurrentTime(current)
-      setDuration(total)
-      if (total > 0) setProgress(current / total)
-    }, 500)
-    return () => { if (progressInterval.current) clearInterval(progressInterval.current) }
-  }, [currentTrack])
-
-  useEffect(() => {
-    if (!currentTrack) return
-    if (isPlaying) resumeAudio()
-    else pauseAudio()
-  }, [isPlaying])
-
-  useEffect(() => { setVolume(volume) }, [volume])
+    return () => {
+      removeDragListenersRef.current?.()
+    }
+  }, [])
 
   function getRatioFromEvent(e: MouseEvent | React.MouseEvent) {
     if (!progressBarRef.current) return 0
@@ -53,29 +44,40 @@ export default function Player() {
 
   function handleProgressClick(e: React.MouseEvent<HTMLDivElement>) {
     const ratio = getRatioFromEvent(e)
-    seekAudio(ratio * getDuration())
+    const nextTime = ratio * duration
+    seek(nextTime)
     setProgress(ratio)
-    setCurrentTime(ratio * getDuration())
+    setPreviewTime(null)
   }
 
   function handleMouseDown(e: React.MouseEvent<HTMLDivElement>) {
+    removeDragListenersRef.current?.()
     isDragging.current = true
     const ratio = getRatioFromEvent(e)
+    const nextTime = ratio * duration
     setProgress(ratio)
-    setCurrentTime(ratio * getDuration())
+    setPreviewTime(nextTime)
     function handleMouseMove(e: MouseEvent) {
       const ratio = getRatioFromEvent(e)
+      const nextTime = ratio * duration
       setProgress(ratio)
-      setCurrentTime(ratio * getDuration())
+      setPreviewTime(nextTime)
     }
     function handleMouseUp(e: MouseEvent) {
       const ratio = getRatioFromEvent(e)
-      seekAudio(ratio * getDuration())
+      seek(ratio * duration)
       setProgress(ratio)
+      setPreviewTime(null)
       isDragging.current = false
+      removeDragListenersRef.current?.()
+    }
+
+    removeDragListenersRef.current = () => {
       window.removeEventListener('mousemove', handleMouseMove)
       window.removeEventListener('mouseup', handleMouseUp)
+      removeDragListenersRef.current = null
     }
+
     window.addEventListener('mousemove', handleMouseMove)
     window.addEventListener('mouseup', handleMouseUp)
   }
@@ -88,8 +90,15 @@ export default function Player() {
 
   if (!currentTrack) return null
 
+  const displayTime = previewTime ?? currentTime
+  const playbackProgress = duration > 0 ? currentTime / duration : 0
+  const displayProgress = previewTime === null ? playbackProgress : progress
+  const repeatLabel = repeatMode === 'one' ? '한 곡 반복' : repeatMode === 'all' ? '전체 반복' : '반복 꺼짐'
+  const repeatText = repeatMode === 'one' ? '↻1' : '↻'
+
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50">
+      <Waveform />
 
       {/* 진행 바 */}
       <div
@@ -100,11 +109,11 @@ export default function Player() {
       >
         <div
           className="absolute left-0 top-0 h-full bg-nc-accent transition-none"
-          style={{ width: `${progress * 100}%` }}
+          style={{ width: `${displayProgress * 100}%` }}
         />
         <div
           className="absolute top-1/2 w-3 h-3 rounded-full bg-nc-accent opacity-0 group-hover:opacity-100 transition-opacity"
-          style={{ left: `${progress * 100}%`, transform: 'translate(-50%, -50%)', zIndex: 60 }}
+          style={{ left: `${displayProgress * 100}%`, transform: 'translate(-50%, -50%)', zIndex: 60 }}
         />
       </div>
 
@@ -138,7 +147,7 @@ export default function Player() {
           {/* 시간 */}
           <div className="flex items-center gap-1">
             <span className="font-mono text-[10px] text-nc-text-muted w-8 text-right">
-              {formatTime(currentTime)}
+              {formatTime(displayTime)}
             </span>
             <span className="font-mono text-[10px] text-nc-text-muted">/</span>
             <span className="font-mono text-[10px] text-nc-text-muted w-8">
@@ -175,10 +184,27 @@ export default function Player() {
               </p>
             )}
           </div>
+          <AddToPlaylistMenu track={currentTrack} side="top" />
         </div>
 
         {/* ── 우측 — 볼륨 + 큐 토글 ── */}
         <div className="flex items-center justify-end gap-4">
+          <button
+            onClick={toggleRepeatMode}
+            className={`
+              h-7 min-w-7 rounded-sm border px-2
+              font-mono text-[10px] transition-all
+              ${repeatMode === 'off'
+                ? 'border-white/10 bg-white/5 text-nc-text-muted hover:bg-white/10 hover:text-nc-text'
+                : 'border-nc-accent/40 bg-nc-accent/20 text-nc-accent'
+              }
+            `}
+            aria-label={repeatLabel}
+            title={repeatLabel}
+          >
+            {repeatText}
+          </button>
+
           {/* 볼륨 */}
           <div className="flex items-center gap-2 w-28">
             <span className="text-nc-text-muted flex-shrink-0">

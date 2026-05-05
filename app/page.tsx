@@ -1,6 +1,7 @@
 // app/page.tsx
 import { supabase } from '@/lib/supabase'
 import ShowCard from '@/components/ShowCard'
+import LibrarySidebar from '@/components/LibrarySidebar'
 
 export default async function Home() {
   const { data: shows, error } = await supabase
@@ -21,22 +22,28 @@ export default async function Home() {
   )
 
   return (
-    <div className="px-8 py-10">
-      {/* 헤더 */}
-      <div className="mb-8 pb-6 border-b border-white/10">
-        <p className="font-mono text-[9px] tracking-[0.2em] text-nc-accent uppercase mb-2">
-          Archive
-        </p>
-        <h1 className="font-display text-3xl font-light text-nc-text">
-          공연 목록
-        </h1>
-      </div>
+    <div className="flex h-[calc(100vh-148px)]">
+      <aside className="w-72 flex-shrink-0 border-r border-white/10 overflow-hidden">
+        <LibrarySidebar />
+      </aside>
 
-      {/* 공연 그리드 */}
-      <div className="grid grid-cols-3 xl:grid-cols-5 2xl:grid-cols-5 gap-4">
-        {shows.map(show => (
-          <ShowCard key={show.id} show={show} />
-        ))}
+      <div className="min-w-0 flex-1 overflow-y-auto px-8 py-10">
+        {/* 헤더 */}
+        <div className="mb-8 pb-6 border-b border-white/10">
+          <p className="font-mono text-[9px] tracking-[0.2em] text-nc-accent uppercase mb-2">
+            Archive
+          </p>
+          <h1 className="font-display text-3xl font-light text-nc-text">
+            공연 목록
+          </h1>
+        </div>
+
+        {/* 공연 그리드 */}
+        <div className="grid grid-cols-3 xl:grid-cols-5 2xl:grid-cols-5 gap-4">
+          {shows.map(show => (
+            <ShowCard key={show.id} show={show} />
+          ))}
+        </div>
       </div>
     </div>
   )
