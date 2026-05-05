@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
+import { HugeiconsIcon } from '@hugeicons/react'
+import { PlusSignIcon } from '@hugeicons/core-free-icons'
 import PlaylistCard from '@/components/PlaylistCard'
 import { usePlayerStore } from '@/store/playerStore'
 
@@ -24,12 +26,12 @@ export default function LibrarySidebar() {
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <div className="flex-shrink-0 border-b border-white/10 px-4 py-3">
+      <div className="flex-shrink-0 border-b border-white/15 px-4 py-3">
         <div className="flex items-center justify-between">
-          <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-nc-text-muted">
+          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-nc-text-muted">
             플레이리스트
           </p>
-          <span className="font-mono text-[9px] text-nc-text-muted">
+          <span className="font-mono text-[11px] text-nc-text-muted">
             {savedPlaylists.length}
           </span>
         </div>
@@ -44,18 +46,18 @@ export default function LibrarySidebar() {
             <div
               className="
                 mb-2 flex aspect-square w-full items-center justify-center rounded-sm
-                border border-dashed border-white/15 bg-white/5
+                border border-dashed border-white/15 bg-white/10
                 transition-colors group-hover:border-nc-accent/40 group-hover:bg-nc-accent/10
               "
             >
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-xl text-nc-text-muted transition-colors group-hover:bg-nc-accent group-hover:text-black">
-                +
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-nc-text-muted transition-colors group-hover:bg-nc-accent group-hover:text-black">
+                <HugeiconsIcon icon={PlusSignIcon} size={18} color="currentColor" />
               </span>
             </div>
-            <p className="truncate text-xs text-nc-text transition-colors group-hover:text-nc-accent">
+            <p className="truncate text-sm text-nc-text transition-colors group-hover:text-nc-accent">
               새 플레이리스트
             </p>
-            <p aria-hidden="true" className="mt-0.5 font-mono text-[9px] text-transparent">
+            <p aria-hidden="true" className="mt-0.5 font-mono text-[11px] text-transparent">
               0
             </p>
           </button>
@@ -78,9 +80,9 @@ export default function LibrarySidebar() {
           <form
             onSubmit={handleCreatePlaylist}
             onMouseDown={(e) => e.stopPropagation()}
-            className="w-80 rounded-sm border border-white/10 bg-nc-surface p-5 shadow-2xl"
+            className="w-80 rounded-sm border border-white/15 bg-nc-surface p-5 shadow-2xl"
           >
-            <p className="mb-4 font-mono text-[9px] uppercase tracking-[0.18em] text-nc-text-muted">
+            <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.18em] text-nc-text-muted">
               새 플레이리스트
             </p>
             <input
@@ -89,7 +91,7 @@ export default function LibrarySidebar() {
               onChange={(e) => setNewPlaylistName(e.target.value)}
               placeholder={`새 플레이리스트 ${savedPlaylists.length + 1}`}
               className="
-                mb-4 h-9 w-full rounded-sm border border-white/10 bg-white/5 px-3
+                mb-4 h-9 w-full rounded-sm border border-white/15 bg-white/10 px-3
                 text-sm text-nc-text placeholder:text-nc-text-muted
                 focus:border-nc-accent/50 focus:outline-none
               "
@@ -101,13 +103,13 @@ export default function LibrarySidebar() {
                   setNewPlaylistName('')
                   setIsCreateOpen(false)
                 }}
-                className="h-8 rounded-sm border border-white/10 bg-white/5 px-3 font-mono text-[10px] text-nc-text-muted transition-colors hover:bg-white/10 hover:text-nc-text"
+                className="h-8 rounded-sm border border-white/15 bg-white/10 px-3 font-mono text-[11px] text-nc-text-muted transition-colors hover:bg-white/15 hover:text-nc-text"
               >
                 취소
               </button>
               <button
                 type="submit"
-                className="h-8 rounded-sm bg-nc-accent px-3 font-mono text-[10px] text-black transition-colors hover:bg-nc-accent2"
+                className="h-8 rounded-sm bg-nc-accent px-3 font-mono text-[11px] text-black transition-colors hover:bg-nc-accent2"
               >
                 생성
               </button>

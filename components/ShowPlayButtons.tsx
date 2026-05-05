@@ -1,5 +1,7 @@
 // components/ShowPlayButtons.tsx
 'use client'
+import { HugeiconsIcon } from '@hugeicons/react'
+import { PlayIcon, ShuffleIcon } from '@hugeicons/core-free-icons'
 import { usePlayerStore } from '@/store/playerStore'
 import { Track } from '@/types'
 
@@ -22,15 +24,17 @@ export default function ShowPlayButtons({ tracks, show }: ShowPlayButtonsProps) 
     <div className="flex gap-3">
       <button
         onClick={() => playAll(tracksWithShow)}
-        className="flex items-center gap-2 px-4 py-2 bg-nc-accent text-black text-xs font-mono tracking-wide rounded-sm hover:bg-nc-accent2 transition-colors"
+        className="flex items-center gap-2 px-4 py-2 bg-nc-accent text-black text-sm font-mono tracking-wide rounded-sm hover:bg-nc-accent2 transition-colors"
       >
-        ▶ 전체 재생
+        <HugeiconsIcon icon={PlayIcon} size={13} color="currentColor" />
+        전체 재생
       </button>
       <button
         onClick={() => playShuffle(tracksWithShow)}
-        className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 text-nc-text-dim text-xs font-mono tracking-wide rounded-sm hover:bg-white/10 transition-colors"
+        className="flex items-center gap-2 px-4 py-2 bg-white/10 border border-white/15 text-nc-text-dim text-sm font-mono tracking-wide rounded-sm hover:bg-white/15 transition-colors"
       >
-        ⇄ 셔플 재생
+        <HugeiconsIcon icon={ShuffleIcon} size={13} color="currentColor" />
+        셔플 재생
       </button>
     </div>
   )

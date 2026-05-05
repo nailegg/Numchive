@@ -22,15 +22,15 @@ export default async function Home() {
   )
 
   return (
-    <div className="flex h-[calc(100vh-148px)]">
-      <aside className="w-72 flex-shrink-0 border-r border-white/10 overflow-hidden">
+    <div className="flex h-[calc(100vh-84px-var(--nc-player-height))]">
+      <aside className="w-72 flex-shrink-0 border-r border-white/15 overflow-hidden">
         <LibrarySidebar />
       </aside>
 
       <div className="min-w-0 flex-1 overflow-y-auto px-8 py-10">
         {/* 헤더 */}
-        <div className="mb-8 pb-6 border-b border-white/10">
-          <p className="font-mono text-[9px] tracking-[0.2em] text-nc-accent uppercase mb-2">
+        <div className="mb-8 pb-6 border-b border-white/15">
+          <p className="font-mono text-[11px] tracking-[0.2em] text-nc-accent uppercase mb-2">
             Archive
           </p>
           <h1 className="font-display text-3xl font-light text-nc-text">

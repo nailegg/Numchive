@@ -3,7 +3,6 @@ import type { Metadata } from 'next'
 import './globals.css'
 import Providers from './providers'
 import Player from '@/components/Player'
-import AccentColorPicker from '@/components/AccentColorPicker'
 import KeyboardShortcuts from '@/components/KeyboardShortcuts'
 import QueuePanel from '@/components/QueuePanel'
 import SearchBar from '@/components/SearchBar'
@@ -26,11 +25,11 @@ export default function RootLayout({
         <Providers>
 
           {/* 상단 네비게이션 바 */}
-          <header className="fixed top-0 left-0 right-0 h-21 bg-nc-surface/95 backdrop-blur-md border-b border-white/10 flex items-center px-8 gap-6 z-[200]">
+          <header className="fixed top-0 left-0 right-0 h-21 bg-nc-surface/95 backdrop-blur-md border-b border-white/15 flex items-center px-8 gap-6 z-[200]">
             {/* 로고 */}
             <Link href="/" className="flex flex-col flex-shrink-0">
               <span className="font-mono text-[8px] tracking-[0.2em] text-nc-accent leading-snug mb-0.5">
-                KAIST Number<br/>Origianl Soundtrack Archive
+                KAIST Number<br/>Original Soundtrack Archive
               </span>
               <span className="font-display text-xl font-light text-nc-text hover:text-nc-accent transition-colors">
                 Numchive
@@ -41,11 +40,7 @@ export default function RootLayout({
             <div className="flex-1 flex justify-center">
               <SearchBar />
             </div>
-
-            {/* 우측 아이콘 자리 */}
-            <div className="flex items-center gap-3">
-              <AccentColorPicker />
-            </div>
+            <div className="w-24 flex-shrink-0" />
           </header>
 
           {/* 메인 콘텐츠 */}

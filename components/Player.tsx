@@ -2,11 +2,23 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { VolumeHighIcon, VolumeLowIcon, VolumeOffIcon } from '@hugeicons/core-free-icons'
+import {
+  NextIcon,
+  PauseIcon,
+  PlayIcon,
+  Playlist03Icon,
+  PreviousIcon,
+  RepeatIcon,
+  RepeatOffIcon,
+  RepeatOne01Icon,
+  MusicNoteSquare01Icon,
+  VolumeHighIcon,
+  VolumeLowIcon,
+  VolumeOffIcon,
+} from '@hugeicons/core-free-icons'
 import { usePlayerStore } from '@/store/playerStore'
 import { useAudioController } from '@/hooks/useAudioController'
 import Waveform from '@/components/Waveform'
-import AddToPlaylistMenu from '@/components/AddToPlaylistMenu'
 
 export default function Player() {
   const {
@@ -94,7 +106,11 @@ export default function Player() {
   const playbackProgress = duration > 0 ? currentTime / duration : 0
   const displayProgress = previewTime === null ? playbackProgress : progress
   const repeatLabel = repeatMode === 'one' ? '한 곡 반복' : repeatMode === 'all' ? '전체 반복' : '반복 꺼짐'
-  const repeatText = repeatMode === 'one' ? '↻1' : '↻'
+  const repeatIcon = repeatMode === 'one'
+    ? RepeatOne01Icon
+    : repeatMode === 'all'
+    ? RepeatIcon
+    : RepeatOffIcon
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50">
@@ -118,7 +134,7 @@ export default function Player() {
       </div>
 
       {/* 플레이어 바 — 3열 그리드 */}
-      <div className="h-20 bg-nc-surface/95 backdrop-blur-md border-t border-white/10 grid grid-cols-3 items-center px-8 gap-6">
+      <div className="h-20 bg-nc-surface/95 backdrop-blur-md border-t border-white/15 grid grid-cols-3 items-center px-8 gap-6 shadow-[0_-16px_50px_rgba(0,0,0,0.35)]">
 
         {/* ── 좌측 — 컨트롤 + 시간 ── */}
         <div className="flex items-center gap-5">
@@ -126,31 +142,34 @@ export default function Player() {
           <div className="flex items-center gap-3">
             <button
               onClick={prevTrack}
-              className="text-nc-text-muted hover:text-nc-text transition-colors text-sm"
+              className="flex h-8 w-8 items-center justify-center rounded-full text-nc-text-muted transition-colors hover:bg-white/15 hover:text-nc-text"
+              aria-label="이전 곡"
             >
-              ⏮
+              <HugeiconsIcon icon={PreviousIcon} size={16} color="currentColor" />
             </button>
             <button
               onClick={togglePlay}
-              className="w-8 h-8 rounded-full bg-nc-accent text-black flex items-center justify-center hover:bg-nc-accent2 transition-colors text-sm"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-nc-accent text-black transition-colors hover:bg-nc-accent2"
+              aria-label={isPlaying ? '일시정지' : '재생'}
             >
-              {isPlaying ? '⏸' : '▶'}
+              <HugeiconsIcon icon={isPlaying ? PauseIcon : PlayIcon} size={18} color="currentColor" />
             </button>
             <button
               onClick={nextTrack}
-              className="text-nc-text-muted hover:text-nc-text transition-colors text-sm"
+              className="flex h-8 w-8 items-center justify-center rounded-full text-nc-text-muted transition-colors hover:bg-white/15 hover:text-nc-text"
+              aria-label="다음 곡"
             >
-              ⏭
+              <HugeiconsIcon icon={NextIcon} size={16} color="currentColor" />
             </button>
           </div>
 
           {/* 시간 */}
           <div className="flex items-center gap-1">
-            <span className="font-mono text-[10px] text-nc-text-muted w-8 text-right">
+            <span className="font-mono text-[11px] text-nc-text-muted w-8 text-right">
               {formatTime(displayTime)}
             </span>
-            <span className="font-mono text-[10px] text-nc-text-muted">/</span>
-            <span className="font-mono text-[10px] text-nc-text-muted w-8">
+            <span className="font-mono text-[11px] text-nc-text-muted">/</span>
+            <span className="font-mono text-[11px] text-nc-text-muted w-8">
               {formatTime(duration)}
             </span>
           </div>
@@ -168,7 +187,7 @@ export default function Player() {
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-nc-text-muted text-sm">
-                ♪
+                <HugeiconsIcon icon={MusicNoteSquare01Icon} size={16} color="currentColor" />
               </div>
             )}
           </div>
@@ -179,12 +198,11 @@ export default function Player() {
               {currentTrack.title}
             </p>
             {currentTrack.show_title && (
-              <p className="font-mono text-[10px] text-nc-text-muted mt-0.5 truncate max-w-xs">
+              <p className="font-mono text-[11px] text-nc-text-muted mt-0.5 truncate max-w-xs">
                 {currentTrack.show_title}
               </p>
             )}
           </div>
-          <AddToPlaylistMenu track={currentTrack} side="top" />
         </div>
 
         {/* ── 우측 — 볼륨 + 큐 토글 ── */}
@@ -193,16 +211,16 @@ export default function Player() {
             onClick={toggleRepeatMode}
             className={`
               h-7 min-w-7 rounded-sm border px-2
-              font-mono text-[10px] transition-all
+              font-mono text-[11px] transition-all
               ${repeatMode === 'off'
-                ? 'border-white/10 bg-white/5 text-nc-text-muted hover:bg-white/10 hover:text-nc-text'
+                ? 'border-white/15 bg-white/10 text-nc-text-muted hover:bg-white/15 hover:text-nc-text'
                 : 'border-nc-accent/40 bg-nc-accent/20 text-nc-accent'
               }
             `}
             aria-label={repeatLabel}
             title={repeatLabel}
           >
-            {repeatText}
+            <HugeiconsIcon icon={repeatIcon} size={14} color="currentColor" />
           </button>
 
           {/* 볼륨 */}
@@ -235,15 +253,16 @@ export default function Player() {
             onClick={toggleQueue}
             className={`
               w-7 h-7 flex items-center justify-center
-              rounded-sm border border-white/10
-              font-mono text-[10px] transition-all
+              rounded-sm border border-white/15
+              font-mono text-[11px] transition-all
               ${isQueueOpen
                 ? 'bg-nc-accent/20 border-nc-accent/40 text-nc-accent'
-                : 'bg-white/5 text-nc-text-muted hover:text-nc-text hover:bg-white/10'
+                : 'bg-white/10 text-nc-text-muted hover:text-nc-text hover:bg-white/15'
               }
             `}
+            aria-label="재생 목록"
           >
-            {isQueueOpen ? '▼' : '▲'}
+            <HugeiconsIcon icon={Playlist03Icon} size={14} color="currentColor" />
           </button>
         </div>
 

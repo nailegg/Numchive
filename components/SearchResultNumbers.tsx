@@ -1,5 +1,7 @@
 // components/SearchResultNumbers.tsx
 'use client'
+import { HugeiconsIcon } from '@hugeicons/react'
+import { TheaterIcon } from '@hugeicons/core-free-icons'
 import { usePlayerStore } from '@/store/playerStore'
 import { NumberWithShow, Track } from '@/types'
 import AddToPlaylistMenu from '@/components/AddToPlaylistMenu'
@@ -37,11 +39,11 @@ export default function SearchResultNumbers({ numbers }: SearchResultNumbersProp
             grid grid-cols-[40px_auto_1fr_auto_auto] items-center
             gap-4 px-4 py-3 rounded-sm cursor-pointer
             border border-transparent transition-all duration-150
-            hover:bg-white/5 hover:border-white/10
+            hover:bg-white/15 hover:border-white/15
           "
         >
           {/* 번호 */}
-          <span className="font-mono text-xs text-nc-text-muted text-center">
+          <span className="font-mono text-sm text-nc-text-muted text-center">
             {String(i + 1).padStart(2, '0')}
           </span>
 
@@ -55,7 +57,7 @@ export default function SearchResultNumbers({ numbers }: SearchResultNumbersProp
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-nc-text-muted text-sm">
-                🎭
+                <HugeiconsIcon icon={TheaterIcon} size={16} color="currentColor" />
               </div>
             )}
           </div>
@@ -64,7 +66,7 @@ export default function SearchResultNumbers({ numbers }: SearchResultNumbersProp
           <div className="min-w-0">
             <p className="text-sm text-nc-text truncate">{number.title}</p>
             {number.shows?.title && (
-              <p className="font-mono text-[10px] text-nc-text-muted mt-0.5">
+              <p className="font-mono text-[11px] text-nc-text-muted mt-0.5">
                 {number.shows.title}
               </p>
             )}

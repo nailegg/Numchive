@@ -8,6 +8,14 @@ import {
   useSortable,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
+import { HugeiconsIcon } from '@hugeicons/react'
+import {
+  Delete01Icon,
+  DragDropVerticalIcon,
+  MusicNoteSquare01Icon,
+  PlayIcon,
+  ShuffleIcon,
+} from '@hugeicons/core-free-icons'
 import PlaylistCover from '@/components/PlaylistCover'
 import { Track } from '@/types'
 import { usePlayerStore } from '@/store/playerStore'
@@ -61,35 +69,37 @@ function PlaylistTrackRow({ playlistId, playlistName, tracks, track, index }: Pl
       className={`
         grid grid-cols-[32px_28px_44px_1fr_auto_auto] items-center gap-4
         rounded-sm border border-transparent px-4 py-3 cursor-pointer
-        transition-all hover:bg-white/5 hover:border-white/10
+        transition-all hover:bg-white/15 hover:border-white/15
         ${currentTrack?.id === track.id ? 'bg-nc-accent/5 border-nc-accent/15' : ''}
         ${isDragging ? 'opacity-80 bg-white/10' : ''}
       `}
     >
-      <span className={`font-mono text-xs text-center ${currentTrack?.id === track.id ? 'text-nc-accent' : 'text-nc-text-muted'}`}>
+      <span className={`font-mono text-sm text-center ${currentTrack?.id === track.id ? 'text-nc-accent' : 'text-nc-text-muted'}`}>
         {String(index + 1).padStart(2, '0')}
       </span>
       <button
         {...attributes}
         {...listeners}
         onClick={(e) => e.stopPropagation()}
-        className="cursor-grab text-nc-text-muted active:cursor-grabbing"
+        className="flex h-7 w-7 cursor-grab items-center justify-center rounded-sm text-nc-text-muted transition-colors hover:bg-white/15 hover:text-nc-text active:cursor-grabbing"
         aria-label="트랙 순서 변경"
       >
-        ⋮⋮
+        <HugeiconsIcon icon={DragDropVerticalIcon} size={14} color="currentColor" />
       </button>
       <div className="h-11 w-11 overflow-hidden rounded-sm bg-nc-surface2">
         {track.show_artwork_url ? (
           <img src={track.show_artwork_url} alt={track.show_title ?? ''} className="h-full w-full object-cover" />
         ) : (
-          <div className="flex h-full w-full items-center justify-center text-nc-text-muted">♪</div>
+          <div className="flex h-full w-full items-center justify-center text-nc-text-muted">
+            <HugeiconsIcon icon={MusicNoteSquare01Icon} size={17} color="currentColor" />
+          </div>
         )}
       </div>
       <div className="min-w-0">
         <p className={`truncate text-sm ${currentTrack?.id === track.id ? 'text-nc-accent' : 'text-nc-text'}`}>
           {track.title}
         </p>
-        <p className="mt-0.5 truncate font-mono text-[10px] text-nc-text-muted">
+        <p className="mt-0.5 truncate font-mono text-[11px] text-nc-text-muted">
           {track.show_title}
         </p>
       </div>
@@ -103,10 +113,10 @@ function PlaylistTrackRow({ playlistId, playlistName, tracks, track, index }: Pl
           e.stopPropagation()
           removeTrackFromPlaylist(playlistId, track.id)
         }}
-        className="rounded-sm border border-white/10 bg-white/5 px-2 py-1 font-mono text-[10px] text-nc-text-muted transition-colors hover:bg-white/10 hover:text-nc-text"
+        className="flex h-7 w-7 items-center justify-center rounded-sm border border-white/15 bg-white/10 text-nc-text-muted transition-colors hover:bg-white/15 hover:text-nc-text"
         aria-label={`${track.title} 제거`}
       >
-        제거
+        <HugeiconsIcon icon={Delete01Icon} size={13} color="currentColor" />
       </button>
     </li>
   )
@@ -134,11 +144,8 @@ export default function PlaylistPage({ playlistId }: PlaylistPageProps) {
 
   const activePlaylist = playlist
 
-  function handleRenamePlaylist(e: React.FormEvent) {
-    e.preventDefault()
-    const formData = new FormData(e.currentTarget as HTMLFormElement)
-
-    renamePlaylist(playlistId, String(formData.get('playlistName') ?? ''))
+  function renameFromInput(input: HTMLInputElement) {
+    renamePlaylist(playlistId, input.value)
   }
 
   function handleDeletePlaylist() {
@@ -161,64 +168,63 @@ export default function PlaylistPage({ playlistId }: PlaylistPageProps) {
 
   return (
     <div className="flex h-full flex-col overflow-hidden">
-      <div className="relative flex-shrink-0 overflow-hidden px-10 pb-8 pt-12">
+      <div className="relative h-54 flex-shrink-0 overflow-hidden">
         {playlist.tracks[0]?.show_artwork_url && (
           <div
             className="absolute inset-0 scale-110 bg-cover bg-center"
             style={{
               backgroundImage: `url(${playlist.tracks[0].show_artwork_url})`,
-              filter: 'blur(24px)',
-              opacity: 0.24,
+              filter: 'blur(20px)',
+              opacity: 0.26,
             }}
           />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-nc-bg via-nc-bg/70 to-nc-bg/40" />
-        <div className="relative flex items-end gap-8">
-          <PlaylistCover tracks={playlist.tracks} size="lg" />
+        <div className="absolute inset-0 bg-gradient-to-t from-nc-bg via-nc-bg/65 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 flex items-end gap-6 px-10 pb-6">
+          <PlaylistCover tracks={playlist.tracks} size="md" />
 
-          <div className="min-w-0 flex-1 pb-2">
-            <p className="mb-2 font-mono text-[9px] uppercase tracking-[0.2em] text-nc-accent">
+          <div className="min-w-0 flex-1">
+            <p className="mb-1 font-mono text-[11px] uppercase tracking-[0.2em] text-nc-accent">
               Playlist
             </p>
-            <form onSubmit={handleRenamePlaylist} className="mb-4 flex max-w-xl gap-3">
-              <input
-                key={playlist.id}
-                name="playlistName"
-                defaultValue={playlist.name}
-                className="
-                  min-w-0 flex-1 bg-transparent font-display text-5xl font-light leading-none
-                  text-nc-text focus:outline-none
-                "
-              />
-              <button
-                type="submit"
-                className="self-end rounded-sm border border-white/10 bg-white/5 px-3 py-2 font-mono text-[10px] text-nc-text-muted transition-colors hover:bg-white/10 hover:text-nc-text"
-              >
-                저장
-              </button>
-            </form>
-            <p className="mb-6 text-sm text-nc-text-dim">
-              로컬 플레이리스트 · {playlist.tracks.length} tracks
-            </p>
-            <div className="flex items-center gap-3">
+            <input
+              key={playlist.id}
+              defaultValue={playlist.name}
+              onBlur={(e) => renameFromInput(e.currentTarget)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.currentTarget.blur()
+                }
+              }}
+              aria-label="플레이리스트 이름"
+              className="
+                mb-3 w-full max-w-3xl bg-transparent font-display text-4xl font-light leading-none
+                text-nc-text focus:outline-none
+              "
+            />
+
+            <div className="flex gap-3">
               <button
                 onClick={() => playPlaylist(playlist.id)}
                 disabled={!playlist.tracks.length}
-                className="h-12 w-12 rounded-full bg-nc-accent text-xl text-black transition-colors hover:bg-nc-accent2 disabled:cursor-not-allowed disabled:opacity-40"
+                className="flex items-center gap-2 px-4 py-2 bg-nc-accent text-black text-sm font-mono tracking-wide rounded-sm hover:bg-nc-accent2 transition-colors"
                 aria-label="플레이리스트 재생"
               >
-                ▶
+                <HugeiconsIcon icon={PlayIcon} size={13} color="currentColor" />
+                전체 재생
               </button>
               <button
                 onClick={() => playPlaylistShuffle(playlist.id)}
                 disabled={!playlist.tracks.length}
-                className="rounded-sm border border-white/10 bg-white/5 px-4 py-3 font-mono text-[10px] text-nc-text-dim transition-colors hover:bg-white/10 hover:text-nc-text disabled:cursor-not-allowed disabled:opacity-40"
+                className="flex items-center gap-2 px-4 py-2 bg-white/10 border border-white/15 text-nc-text-dim text-sm font-mono tracking-wide rounded-sm hover:bg-white/15 transition-colors"
               >
-                셔플
+                <HugeiconsIcon icon={ShuffleIcon} size={13} color="currentColor" />
+                셔플 재생
+                
               </button>
               <button
                 onClick={handleDeletePlaylist}
-                className="rounded-sm border border-white/10 bg-white/5 px-4 py-3 font-mono text-[10px] text-nc-text-muted transition-colors hover:bg-white/10 hover:text-nc-text"
+                className="rounded-sm border border-white/15 bg-white/10 px-4 py-2 font-mono text-[11px] text-nc-text-muted transition-colors hover:bg-white/15 hover:text-nc-text"
               >
                 삭제
               </button>
@@ -228,11 +234,11 @@ export default function PlaylistPage({ playlistId }: PlaylistPageProps) {
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col px-10 py-4">
-        <div className="mb-1 flex flex-shrink-0 items-center justify-between border-b border-white/10 pb-3">
-          <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-nc-text-muted">
+        <div className="mb-1 flex flex-shrink-0 items-center justify-between border-b border-white/15 pb-3">
+          <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-nc-text-muted">
             트랙 목록
           </span>
-          <span className="font-mono text-[9px] text-nc-text-muted">
+          <span className="font-mono text-[11px] text-nc-text-muted">
             {playlist.tracks.length} tracks
           </span>
         </div>
@@ -261,7 +267,7 @@ export default function PlaylistPage({ playlistId }: PlaylistPageProps) {
           </div>
         ) : (
           <div className="flex flex-1 items-center justify-center text-center text-sm text-nc-text-muted">
-            트랙 목록이나 플레이어의 + 버튼으로 곡을 추가하세요
+            트랙 목록의 + 버튼으로 곡을 추가하세요
           </div>
         )}
       </div>

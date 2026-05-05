@@ -99,14 +99,14 @@
   --sidebar-ring: oklch(0.708 0 0);
 
   /* ── Numchive 커스텀 변수 ── */
-  --nc-bg: #0a0a0f;
-  --nc-surface: #111118;
-  --nc-surface2: #18181f;
-  --nc-accent: #c8a96e;
-  --nc-accent2: #8b6f47;
-  --nc-text: #e8e4dc;
-  --nc-text-muted: #6b6760;
-  --nc-text-dim: #9b9690;
+  --nc-bg: #070a08;
+  --nc-surface: #121713;
+  --nc-surface2: #202720;
+  --nc-accent: #9abca4;
+  --nc-accent2: #789b83;
+  --nc-text: #eef3ef;
+  --nc-text-muted: #8a958d;
+  --nc-text-dim: #c0c9c2;
   --nc-border: 255, 255, 255;
 }
 

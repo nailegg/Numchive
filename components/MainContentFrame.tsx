@@ -1,12 +1,17 @@
 'use client'
 
+import type { CSSProperties } from 'react'
 import { usePlayerStore } from '@/store/playerStore'
 
 export default function MainContentFrame({ children }: { children: React.ReactNode }) {
-  const { isQueueOpen } = usePlayerStore()
+  const { currentTrack, isQueueOpen } = usePlayerStore()
+  const style = {
+    '--nc-player-height': currentTrack ? '84px' : '0px',
+  } as CSSProperties
 
   return (
     <main
+      style={style}
       className={`
         min-h-screen pt-21 transition-[margin,transform] duration-300 ease-in-out
         origin-left

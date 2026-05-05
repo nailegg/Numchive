@@ -56,11 +56,11 @@ export default function TrackList({ tracks, show }: TrackListProps) {
               grid grid-cols-[40px_1fr_auto_auto] items-center
               gap-4 px-4 py-3 rounded-sm cursor-pointer
               border border-transparent transition-all duration-150
-              hover:bg-white/5 hover:border-white/10
+              hover:bg-white/15 hover:border-white/15
               ${currentTrack?.id === track.id ? 'bg-nc-accent/5 border-nc-accent/15' : ''}
             `}
           >
-            <span className={`font-mono text-xs text-center ${currentTrack?.id === track.id ? 'text-nc-accent' : 'text-nc-text-muted'}`}>
+            <span className={`font-mono text-sm text-center ${currentTrack?.id === track.id ? 'text-nc-accent' : 'text-nc-text-muted'}`}>
               {String(i).padStart(2, '0')}
             </span>
             <div className="min-w-0">
